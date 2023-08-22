@@ -1,5 +1,6 @@
 import { Link, useParams } from 'react-router-dom';
 import styled from 'styled-components';
+import { border } from '../../node_modules/@mui/system/index.d';
 
 const campInfo: IcampInfo = {
   campID: 1, // request
@@ -46,7 +47,7 @@ const Page = styled.div`
   align-items: center;
   margin-top: 100px;
 `;
-const Head = styled.div`
+const Grid = styled.div`
   display: grid;
   grid-template-columns: 3fr 2fr;
   /* background-color: blue; */
@@ -100,22 +101,27 @@ const PdfButton = styled.div`
   }
 `;
 
-const Detail = styled.div`
-  display: grid;
-  grid-template-columns: 3fr 2fr;
-  gap: 10px;
-  width: 100%;
-`;
-
 const Left = styled.div`
+  width: 600px;
   /* background-color: red; */
+  display: flex;
+  padding: 30px;
+  border: 1px solid #ddd;
+  margin-top: 30px;
 `;
 const StudentList = styled.div`
   width: 100%;
   margin-top: 10px;
   border-collapse: collapse;
-  border: 1px solid #ddd;
+  /* border: 1px solid #ddd; */
 `;
+
+const Title = styled.div`
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 10px;
+`;
+
 const TableHeader = styled.th`
   border: 1px solid #ddd;
   padding: 8px;
@@ -133,7 +139,7 @@ export default function Camp() {
   return (
     <>
       <Page>
-        <Head>
+        <Grid>
           <CampImg src={campInfo.campImg} />
           <Content>
             <CampSeason>{campInfo.campSeason}</CampSeason>
@@ -143,10 +149,13 @@ export default function Camp() {
               <PdfButton> 수료증 받급받기 </PdfButton>
             </Link>
           </Content>
-        </Head>
-        <Detail>
+        </Grid>
+        <Grid>
           <Left>
             <StudentList>
+              <Title>
+                {campInfo.campSeason} {campInfo.campName} 수료 학생 명단{' '}
+              </Title>
               <thead>
                 <tr>
                   <TableHeader>학번</TableHeader>
@@ -163,8 +172,8 @@ export default function Camp() {
               </tbody>
             </StudentList>
           </Left>
-          <div> ? </div>
-        </Detail>
+          <div />
+        </Grid>
       </Page>
     </>
   );
