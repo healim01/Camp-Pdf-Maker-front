@@ -1,6 +1,7 @@
-import { Link, useParams } from 'react-router-dom';
+import { PDFDownloadLink } from '@react-pdf/renderer';
+// import { Link, useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import { border } from '../../node_modules/@mui/system/index.d';
+import PdfMaker from '../components/PdfMaker';
 
 const campInfo: IcampInfo = {
   campID: 1, // request
@@ -39,7 +40,8 @@ interface Istudent {
   studentName: string;
 }
 
-const Page = styled.div`
+// 기존 코드에서 Page 컴포넌트 이름 변경
+const StyledPage = styled.div`
   padding: 0px 230px;
   display: flex;
   flex-direction: column;
@@ -47,6 +49,7 @@ const Page = styled.div`
   align-items: center;
   margin-top: 100px;
 `;
+
 const Grid = styled.div`
   display: grid;
   grid-template-columns: 3fr 2fr;
@@ -101,6 +104,22 @@ const PdfButton = styled.div`
   }
 `;
 
+// const styles = StyleSheet.create({
+//     Font.register({ family: 'KoreanFont', src: KoreanFont });
+//   page: {
+//     flexDirection: 'row',
+//     backgroundColor: '#E4E4E4',
+//   },
+//   section: {
+//     margin: 10,
+//     padding: 10,
+//     flexGrow: 1,
+//   },
+//   koreanText: {
+//     fontFamily: 'KoreanFont', // 폰트 이름
+//   },
+// });
+
 const Left = styled.div`
   width: 600px;
   /* background-color: red; */
@@ -134,20 +153,69 @@ const TableCell = styled.td`
   text-align: left;
 `;
 
+// function PdfCertificate({ campInfo }: { campInfo: IcampInfo }) {
+//   return (
+//     <Document>
+//       <Page size="A4" style={styles.page}>
+//         <View style={styles.section}>
+//           <Text>수료증</Text>
+//           <Text>이름: {campInfo.student[0].studentName}</Text>
+//           <Text>과정: {campInfo.campName}</Text>
+//           <Text>강사: {campInfo.campProf}</Text>
+//           <Text>수료일: {campInfo.campSeason}</Text>
+//         </View>
+//       </Page>
+//     </Document>
+//   );
+// }
+
 export default function Camp() {
-  const campId = useParams();
+  // const campId = useParams();
+
+  //   const handleGenerateCertificate = () => {
+  //     const doc = new jsPDF();
+
+  //     doc.addFont('path/to/your/font.ttf', 'YourFontAlias', 'normal');
+  //     doc.setFont('YourFontAlias');
+
+  //     doc.setFontSize(20);
+  //     doc.text('수료증', 105, 20, { align: 'center' });
+
+  //     doc.setFontSize(14);
+  //     doc.text(`이름: ${campInfo.student[0].studentName}`, 30, 50);
+  //     doc.text(`과정: ${campInfo.campName}`, 30, 60);
+  //     doc.text(`강사: ${campInfo.campProf}`, 30, 70);
+  //     doc.text(`수료일: ${campInfo.campSeason}`, 30, 80);
+
+  //     // PDF 다운로드
+  //     doc.save('수료증.pdf');
+  //   };
+
   return (
     <>
-      <Page>
+      <StyledPage>
         <Grid>
           <CampImg src={campInfo.campImg} />
           <Content>
             <CampSeason>{campInfo.campSeason}</CampSeason>
             <CampName>{campInfo.campName}</CampName>
             <CampDesc>{campInfo.campProf}</CampDesc>
-            <Link to="/">
-              <PdfButton> 수료증 받급받기 </PdfButton>
-            </Link>
+
+            {/* <PdfButton onClick={handleGenerateCertificate}>
+              수료증 받급받기
+            </PdfButton> */}
+            <PDFDownloadLink
+              document={<PdfMaker campInfo={campInfo} />}
+              fileName="수료증.pdf"
+            >
+              {({ blob, url, loading, error }) =>
+                loading ? (
+                  <PdfButton> PDF 생성 중... </PdfButton>
+                ) : (
+                  <PdfButton> 수료증 받급받기 </PdfButton>
+                )
+              }
+            </PDFDownloadLink>
           </Content>
         </Grid>
         <Grid>
@@ -174,7 +242,7 @@ export default function Camp() {
           </Left>
           <div />
         </Grid>
-      </Page>
+      </StyledPage>
     </>
   );
 }

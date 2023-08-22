@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 import CampCard from '../components/CampCard';
 import { Link } from 'react-router-dom';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
 
 const campInfo = [
   {
@@ -91,16 +93,18 @@ const CardGrid = styled.div`
 export default function Main() {
   return (
     <>
+      <Header />
       <Page>
         <div>Main</div>
         <CardGrid>
           {(campInfo as IcampInfo[])?.map((camp: IcampInfo) => (
-            <Link to="/camp/:campId">
+            <Link to={`/camp/${camp.campID}`}>
               <CampCard key={camp.campID} camp={camp} />
             </Link>
           ))}
         </CardGrid>
       </Page>
+      <Footer />
     </>
   );
 }
