@@ -7,7 +7,7 @@ export const GetAllCamp = async () => {
   return response.data;
 };
 
-export const GetOneCamp = async (id: number) => {
-  const response = await axios.get(`${BASE_URL}/camp/${id}`);
+export const GetOneCamp = async (camp_id: number, user_id: number) => {
+  const response = await axios.get(`${BASE_URL}/camp/${camp_id}/${user_id}`);
   return response.data;
 };
