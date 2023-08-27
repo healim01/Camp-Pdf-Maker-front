@@ -1,8 +1,11 @@
 import styled from 'styled-components';
+import GoogleButton from '../auth/GoogleButton';
+import { useRecoilValue } from 'recoil';
+import { IsLoginState } from '../store/atom';
 
 const Container = styled.header`
   height: 120px;
-  background-color: lightblue;
+  /* background-color: lightblue; */
   margin-bottom: 30px;
   display: flex;
   align-items: center;
@@ -29,14 +32,16 @@ const Item = styled.div`
 `;
 
 export default function Header() {
+  const isUserLoggedIn = useRecoilValue(IsLoginState);
   return (
     <>
       <Container>
         <Logo src="https://csee.handong.edu/wp-content/uploads/2018/02/csee-logo-symbol-e1518540168998.png" />
         <div />
         <MENU>
-          <Item> Camp 모두 보기 </Item>
-          <Item> Login </Item>
+          {/* <Item> Camp 모두 보기 </Item>
+          <Item> Login </Item> */}
+          {isUserLoggedIn ? <Item> MY PAGE </Item> : <GoogleButton />}
         </MENU>
       </Container>
     </>
