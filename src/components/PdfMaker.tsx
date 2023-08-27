@@ -6,7 +6,9 @@ import {
   Document,
   StyleSheet,
   Font,
+  Image,
 } from '@react-pdf/renderer';
+import { PDFViewer } from '@react-pdf/renderer';
 import myfont from '../fonts/KimjungchulMyungjo-Bold.ttf';
 
 export default function PdfMaker({ campInfo }: { campInfo: any }) {
@@ -19,30 +21,48 @@ export default function PdfMaker({ campInfo }: { campInfo: any }) {
   const styles = StyleSheet.create({
     page: {
       flexDirection: 'row',
-      backgroundColor: '#E4E4E4',
       fontFamily: 'KoreanFont',
     },
     section: {
-      margin: 10,
-      padding: 10,
-      flexGrow: 1,
+      position: 'absolute',
+      top: 100,
+      left: 100,
     },
     text: {
       fontSize: 14,
     },
+    title: {
+      fontSize: 45,
+      fontWeight: 'bold',
+    },
+    backgroundImage: {
+      position: 'absolute',
+      width: '100%',
+      height: '100%',
+      zIndex: -1,
+    },
+    contentWrapper: {
+      position: 'relative',
+      flex: 1,
+    },
   });
 
   return (
-    <Document>
-      <Page size="A4" style={styles.page}>
-        <View style={styles.section}>
-          <Text>
-            수료증 {'\n'}
-            이름: {campInfo.campName} {'\n'}
-            학번: {campInfo.campSeason} {'\n'}
-          </Text>
-        </View>
-      </Page>
-    </Document>
+    <PDFViewer width="1000" height="600">
+      <Document>
+        <Page size="A4" style={styles.page}>
+          <View style={styles.contentWrapper}>
+            <Image src="/pdfCover.png" style={styles.backgroundImage} />
+            <View style={styles.section}>
+              <Text>
+                <Text style={styles.title}> 수료증 </Text>
+                이름: {campInfo.campName} {'\n'}
+                학번: {campInfo.campSeason} {'\n'}
+              </Text>
+            </View>
+          </View>
+        </Page>
+      </Document>
+    </PDFViewer>
   );
 }
