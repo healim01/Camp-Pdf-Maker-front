@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { FiArrowRight } from 'react-icons/fi';
+import theme from '../theme';
 
 interface IcampInfo {
   campID: number;
@@ -15,7 +16,6 @@ const Card = styled.div`
   display: flex;
   flex-direction: column;
   gap: 10px;
-  /* background-color: red; */
   position: relative;
 `;
 
@@ -43,7 +43,7 @@ const Button = styled.div`
   gap: 5px;
 
   &:hover {
-    color: blue;
+    color: ${theme.palette.color.main};
   }
 `;
 
