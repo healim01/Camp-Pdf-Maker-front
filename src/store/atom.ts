@@ -9,16 +9,19 @@ const { persistAtom } = recoilPersist({
 export const UserId = atom({
   key: 'UserId',
   default: '',
+  effects_UNSTABLE: [persistAtom],
 });
 
 export const UserName = atom({
   key: 'UserName',
   default: '',
+  effects_UNSTABLE: [persistAtom],
 });
 
 export const UserDept = atom({
   key: 'UserDept',
   default: '',
+  effects_UNSTABLE: [persistAtom],
 });
 
 export const UserEmail = atom({

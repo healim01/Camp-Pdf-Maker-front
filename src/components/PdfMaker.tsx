@@ -20,12 +20,11 @@ interface IcampInfo {
   campProf: string;
   startDate: string;
   endDate: string;
-  student: Istudent[];
-}
-
-interface Istudent {
-  studentId: number;
-  studentName: string;
+  taked: boolean;
+  takesList: {
+    studentId: string;
+    studentName: string;
+  }[];
 }
 
 interface IuserInfo {

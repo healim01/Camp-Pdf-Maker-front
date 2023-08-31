@@ -3,11 +3,13 @@ import { FiArrowRight } from 'react-icons/fi';
 import theme from '../theme';
 
 interface IcampInfo {
-  campID: number;
+  campId: number;
   campName: string;
   campImg: string;
-  campDesc: string;
+  campSeason: string;
   campProf: string;
+  startDate: string;
+  endDate: string;
 }
 
 const Card = styled.div`
@@ -17,6 +19,10 @@ const Card = styled.div`
   flex-direction: column;
   gap: 10px;
   position: relative;
+
+  &:hover {
+    transform: scale(1.02);
+  }
 `;
 
 const CampImg = styled.img`
@@ -52,8 +58,10 @@ export default function CampCard({ camp }: { camp: IcampInfo }) {
     <>
       <Card>
         <CampImg src={camp.campImg} />
-        <CampName>{camp.campName}</CampName>
-        <CampDesc> {camp.campProf} </CampDesc>
+        <CampName>
+          {camp.campSeason} {camp.campName}
+        </CampName>
+        <CampDesc> {camp.campProf} 교수님 </CampDesc>
         <Button>
           {' '}
           수료증 발급 받기 <FiArrowRight size={20} />{' '}

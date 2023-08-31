@@ -41,6 +41,8 @@ export default function Addinfo() {
       if (response.status === 200) {
         const sid = response.data.sid; // memberId 받아오기
         setStudentNumber(sid); // 리코일 atom 상태로 변경
+        setName(name); // 리코일 atom 상태로 변경
+        setDepartment(department); // 리코일 atom 상태로 변경
         history.push('/');
         // memberId를 다음 단계로 넘기거나 원하는 대로 활용할 수 있습니다.
       } else {

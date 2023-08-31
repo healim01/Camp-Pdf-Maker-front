@@ -8,32 +8,9 @@ import Footer from '../components/Footer';
 import theme from '../theme';
 import { UserDept, UserId, UserName } from '../store/atom';
 import { useRecoilValue } from 'recoil';
-
-const campInfo: IcampInfo = {
-  campId: 1, // request
-  campName: '미리미리 C 캠프',
-  campImg:
-    'https://cdn.pixabay.com/photo/2016/11/29/05/45/astronomy-1867616_960_720.jpg',
-  campSeason: '2023 하계',
-  campProf: '김광 교수',
-  startDate: '23.07.01',
-  endDate: '23.07.31',
-  taked: false,
-  student: [
-    {
-      studentId: 22000770,
-      studentName: '김철수',
-    },
-    {
-      studentId: 2,
-      studentName: '이영희',
-    },
-    {
-      studentId: 3,
-      studentName: '홍길동',
-    },
-  ],
-};
+import { useQuery } from 'react-query';
+import { useParams } from 'react-router-dom';
+import { GetOneCamp } from '../apis/CampApi';
 
 interface IcampInfo {
   campId: number;
@@ -44,12 +21,10 @@ interface IcampInfo {
   startDate: string;
   endDate: string;
   taked: boolean;
-  student: Istudent[];
-}
-
-interface Istudent {
-  studentId: number;
-  studentName: string;
+  takesList: {
+    studentId: string;
+    studentName: string;
+  }[];
 }
 interface IuserInfo {
   userId: string;
@@ -64,6 +39,7 @@ const StyledPage = styled.div`
   justify-content: center;
   align-items: center;
   margin-top: 50px;
+  margin-bottom: 50px;
 `;
 
 const Grid = styled.div`
@@ -148,6 +124,7 @@ const List = styled.div`
 const StudentList = styled.div`
   margin-top: 10px;
   border-collapse: collapse;
+  margin-bottom: 30px;
 `;
 
 const Title = styled.div`
@@ -174,7 +151,7 @@ const MemoizedPDFDownloadLink = memo(
   ({ campInfo, userInfo }: { campInfo: IcampInfo; userInfo: IuserInfo }) => (
     <PDFDownloadLink
       document={<PdfMaker campInfo={campInfo} userInfo={userInfo} />}
-      fileName="수료증.pdf"
+      fileName={`${campInfo.campName}_${userInfo.userId}_${userInfo.userName}.pdf`}
     >
       {({ blob, url, loading, error }) =>
         loading ? (
@@ -187,7 +164,12 @@ const MemoizedPDFDownloadLink = memo(
   ),
 );
 
+interface RouteParams {
+  campId: string;
+}
+
 export default function Camp() {
+  const { campId } = useParams<RouteParams>();
   const userId = useRecoilValue(UserId);
   const userName = useRecoilValue(UserName);
   const userDept = useRecoilValue(UserDept);
@@ -197,19 +179,28 @@ export default function Camp() {
     userName: userName,
     userDept: userDept,
   };
-  console.log(userInfo);
+
+  const { isLoading, data: campInfo } = useQuery<IcampInfo>(
+    ['GetOneCamp', GetOneCamp],
+    () => GetOneCamp(campId, userId).then((response) => response),
+    {
+      onSuccess: (data) => {
+        console.log('GetAllCaGetOneCampegory', data);
+      },
+    },
+  );
 
   return (
     <>
       <Header />
       <StyledPage>
         <Grid>
-          <CampImg src={campInfo.campImg} />
+          <CampImg src={campInfo?.campImg} />
           <Content>
-            <CampSeason>{campInfo.campSeason}</CampSeason>
-            <CampName>{campInfo.campName}</CampName>
-            <CampDesc>{campInfo.campProf} 교수님</CampDesc>
-            {campInfo.taked ? (
+            <CampSeason>{campInfo?.campSeason}</CampSeason>
+            <CampName>{campInfo?.campName}</CampName>
+            <CampDesc>{campInfo?.campProf} 교수님</CampDesc>
+            {campInfo?.taked ? (
               <MemoizedPDFDownloadLink
                 campInfo={campInfo}
                 userInfo={userInfo}
@@ -222,7 +213,7 @@ export default function Camp() {
         <List>
           <StudentList>
             <Title>
-              {campInfo.campSeason} {campInfo.campName} 수료 학생 명단{' '}
+              {campInfo?.campSeason} {campInfo?.campName} 수료 학생 명단{' '}
             </Title>
             <thead>
               <tr>
@@ -231,7 +222,7 @@ export default function Camp() {
               </tr>
             </thead>
             <tbody>
-              {campInfo.student.map((student: Istudent) => (
+              {campInfo?.takesList.map((student) => (
                 <tr key={student.studentId}>
                   <TableCell>{student.studentId}</TableCell>
                   <TableCell>{student.studentName}</TableCell>
@@ -241,7 +232,7 @@ export default function Camp() {
           </StudentList>
         </List>
       </StyledPage>
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 }

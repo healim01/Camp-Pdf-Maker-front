@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import Header from '../components/Header';
+import Footer from '../components/Footer';
 
 const Container = styled.div`
   position: relative;
@@ -36,6 +37,7 @@ export default function Home() {
         <Img src="https://cdn.pixabay.com/photo/2019/04/14/10/27/book-4126483_1280.jpg" />
         <TextOverlay> SW 중심대학 수료증 발급 </TextOverlay>
       </Container>
+      <Footer />
     </>
   );
 }
